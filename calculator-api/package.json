@@ -85,7 +85,7 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node init && node index.js",
     "test": "mocha",
     "test:watch": "mocha --watch --parallel --watch-files test/*"
   },
