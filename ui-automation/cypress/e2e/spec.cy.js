@@ -11,7 +11,7 @@ describe("template spec", () => {
     // Enter 200 in the second text field
     cy.get("input[data-test=val2]").type("200");
     cy.wait(1000);
-  
+  yyy
     // Click the calculate button
     cy.get("input[data-test=calculate]").click();
     cy.wait(2500);

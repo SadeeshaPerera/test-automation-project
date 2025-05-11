@@ -1,47 +1,76 @@
 import { useState } from "react";
 import "./App.css";
 
-
 function App() {
- const [val1, setVal1] = useState();
- const [val2, setVal2] = useState();
- const [result, setResult] = useState();
+  const [val1, setVal1] = useState("");
+  const [val2, setVal2] = useState("");
+  const [operation, setOperation] = useState("add");
+  const [result, setResult] = useState("");
 
+  const calculate = async () => {
+    const apiResult = await fetch(`/api/${operation}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        val1: parseInt(val1),
+        val2: parseInt(val2),
+      }),
+    });
+    const jsonResult = await apiResult.json();
+    setResult(jsonResult.result);
+  };
 
- const calculate = async () => {
-   const apiResult = await fetch("/api/add", {
-     method: "POST",
-     headers: {
-       Accept: "application/json",
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       val1: parseInt(val1),
-       val2: parseInt(val2),
-     }),
-   });
-   const jsonResult = await apiResult.json();
-   setResult(jsonResult.result);
- };
-
-
- return (
-   <>
-     <h2> Awesome Calculator! </h2>
-     <label>Enter Val1 </label>
-     <input type="text" data-test="val1" onChange={(e) => setVal1(e.target.value)} />
-     <br />
-     <label>Enter Val2 </label>
-     <input type="text" data-test="val2" onChange={(e) => setVal2(e.target.value)} />
-     <br />
-     <br />
-     <input type="button" data-test="calculate" onClick={calculate} value="Calculate" />
-     <br />
-     <br />
-     <label>Result : <span data-test="result">{result}</span></label>
-   </>
- );
+  return (
+    <div className="calculator-container">
+      <div className="calculator">
+        <h2 className="title">Modern Calculator</h2>
+        <div className="input-group">
+          <input
+            type="number"
+            data-test="val1"
+            value={val1}
+            onChange={(e) => setVal1(e.target.value)}
+            placeholder="Enter first number"
+            className="input-field"
+          />
+        </div>
+        <div className="input-group">
+          <select 
+            data-test="operation"
+            value={operation} 
+            onChange={(e) => setOperation(e.target.value)}
+            className="select-field"
+          >
+            <option value="add">Addition (+)</option>
+            <option value="subtract">Subtraction (-)</option>
+            <option value="multiply">Multiplication (×)</option>
+            <option value="divide">Division (÷)</option>
+            <option value="power">Power (^)</option>
+            <option value="modulo">Modulo (%)</option>
+          </select>
+        </div>
+        <div className="input-group">
+          <input
+            type="number"
+            data-test="val2"
+            value={val2}
+            onChange={(e) => setVal2(e.target.value)}
+            placeholder="Enter second number"
+            className="input-field"
+          />
+        </div>
+        <button data-test="calculate" onClick={calculate} className="calc-button">
+          Calculate
+        </button>
+        <div className="result" data-test="result">
+          {result && <h3>Result: {result}</h3>}
+        </div>
+      </div>
+    </div>
+  );
 }
-
 
 export default App;
